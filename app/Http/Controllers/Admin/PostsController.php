@@ -45,6 +45,7 @@ class PostsController extends Controller
 
     public function edit(Post $post)
     {
+        $this->authorize('update', $post);
         return view('admin.posts.edit', compact('post'));
     }
 
@@ -69,6 +70,8 @@ class PostsController extends Controller
 
     public function delete(Post $post)
     {
+        $this->authorize('delete', $post);
+
         Post::destroy($post->id);
         return redirect()->route('admin.posts.index')->with('msg', 'Post is deleted');
     }

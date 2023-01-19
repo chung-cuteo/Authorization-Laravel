@@ -46,11 +46,14 @@ class GroupsController extends Controller
 
     public function edit(Group $group)
     {
+        $this->authorize('update', $group);
+
         return view('admin.groups.edit', compact('group'));
     }
 
     public function postEdit(Group $group, Request $request)
     {
+        $this->authorize('update', $group);
         $request->validate(
             [
                 'name' => 'required | unique:groups,name,' . $group->id,
@@ -69,6 +72,7 @@ class GroupsController extends Controller
 
     public function delete(Group $group)
     {
+        $this->authorize('delete', $group);
         $userCount = $group->user->count();
 
         if ($userCount == 0) {
@@ -80,6 +84,8 @@ class GroupsController extends Controller
 
     public function permission(Group $group)
     {
+        $this->authorize('permission', $group);
+
         $modules = Module::all();
         $roleArr = [];
         $roleJson = $group->permissions;
@@ -92,6 +98,8 @@ class GroupsController extends Controller
 
     public function postPermission(Group $group, Request $request)
     {
+        $this->authorize('permission', $group);
+
         $roles = [];
 
         if (!empty($request->role)) {

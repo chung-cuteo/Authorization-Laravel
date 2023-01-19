@@ -61,12 +61,16 @@ class UsersController extends Controller
 
     public function edit(User $user)
     {
+        $this->authorize('delete', $user);
+
         $groups = Group::all();
         return view('admin.users.edit', compact('groups', 'user'));
     }
 
     public function postEdit(User $user, Request $request)
     {
+        $this->authorize('delete', $user);
+
         $request->validate(
             [
                 'name' => 'required',
@@ -100,6 +104,8 @@ class UsersController extends Controller
 
     public function delete(User $user)
     {
+        $this->authorize('delete', $user);
+
         if (Auth::user()->id !== $user->id) {
             User::destroy($user->id);
             return redirect()->route('admin.users.index')->with('msg', 'User is deleted');
